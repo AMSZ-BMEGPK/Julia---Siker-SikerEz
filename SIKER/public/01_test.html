@@ -5,22 +5,31 @@
 <META name="viewport"
  content="width=device-width, initial-scale=1.0">
 <title>TEST PAGE</title>
+
+<link rel="stylesheet" href="01_test.css">
+
 </head>
 <body>
 
-  <label for="Keypoint">Keypoint:</label><br> <!-- Keypoint label --> 
-  <input type="text" id="KPOI" name="KPOI" value="1"><br> <!-- Keypoint form settings --> 
+<div class="flex-container">
 
-  <label for="lname">x - coordinate:</label><br>
-  <input type="text" id="Xcoord" name="Xcoord" value="0"><br>
+  <div class="flex-child input">
+    <label for="Keypoint">Keypoint:</label><br> <!-- Keypoint label --> 
+    <input type="text" id="KPOI" name="KPOI" value="1"><br> <!-- Keypoint form settings --> 
 
-  <label for="lname">y - coordinate:</label><br>
-  <input type="text" id="Ycoord" name="Ycoord" value="0"><br><br>
+    <label for="xcoord">x - coordinate:</label><br>
+    <input type="text" id="Xcoord" name="Xcoord" value="0"><br>
 
-  <button id="submit_button" > Submit </button> 
+    <label for="xcoord">y - coordinate:</label><br>
+    <input type="text" id="Ycoord" name="Ycoord" value="0"><br><br>
 
-  <canvas id="myCanvas" width="500" height="500" style="border:1px solid #555151;" ></canvas>
+    <button id="submit_button" > Submit </button> 
+  </div>
 
+  <div class="flex-child canvas">
+    <canvas id="myCanvas" width="500" height="500" style="border:1px solid #555151;" ></canvas>
+  </div>
+</div>
 
 <script src="01_test_script.js"></script>
 
