@@ -1,1 +1,1 @@
-# Julia---Siker-SikerEz
+# SIKER/SIKEREZ átírása Julia nyelven.
