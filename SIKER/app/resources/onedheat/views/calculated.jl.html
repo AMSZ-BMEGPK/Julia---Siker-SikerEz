@@ -1,7 +1,7 @@
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-<div id="myPlot" style="width:100%;max-width:700px"></div>
+<div id="myPlot" style="width:100%;max-width:700px;margin: auto;"></div>
 
 <script>
 var xValues = [];
@@ -10,7 +10,12 @@ var yValues = [];
 // Generate values
 for (var x = 0; x <= 10; x += 1) {
   xValues.push(x);
-  yValues.push(x*$(w));
+//   yValues.push(x);
+}
+
+for (var x = 0; x <= 10; x += 1) {
+  yValues.push($(T)[x]);
+//   yValues.push(x);
 }
 
 // Define Data
@@ -21,7 +26,7 @@ var data = [{
 }];
 
 // Define Layout
-var layout = {title: "y = x"};
+var layout = {title: "x^2"};
 
 // Display using Plotly
 Plotly.newPlot("myPlot", data, layout);

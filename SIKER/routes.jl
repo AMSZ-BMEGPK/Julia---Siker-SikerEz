@@ -1,5 +1,6 @@
 using Genie.Router
 using  RectanglesController
+using OneDHeatsController
 using Genie.Requests
 
 route("/") do
@@ -21,7 +22,10 @@ end
 # ---------------------------------------------------------------------
 #example: 1 D stat heat conduction
 route("/onedheat") do 
-  RectanglesController.show_results()
+  OneDHeatsController.show_results()
+end
+route("/codh") do 
+  OneDHeatsController.show_calculation(11)
 end
 
 
