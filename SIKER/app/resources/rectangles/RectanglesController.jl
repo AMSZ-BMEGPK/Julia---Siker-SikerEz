@@ -21,5 +21,10 @@ module RectanglesController
   function rectangle_view(a,b)
     html(:rectangles, :rectangleview, x1= x1, y1=y1,w=a,h=b)
   end
+  function show_results()
+    a = 2
+    b = 3
+    html(:rectangles, :ondheatview, x1= x1, y1=y1,w=a,h=b)
+  end
 
 end

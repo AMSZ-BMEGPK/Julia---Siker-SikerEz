@@ -2,11 +2,10 @@ using Genie.Router
 using  RectanglesController
 using Genie.Requests
 
-global belso = 3
 route("/") do
   serve_static_file("welcome.html")
 end
-
+#example: Rectangles -------------------------------------------------
 route("/rw") do 
   RectanglesController.rectangle_view(200,200)
 end
@@ -18,6 +17,11 @@ end
 
 route("/ask_for_input") do 
   serve_static_file("asking_for_input.html")
+end
+# ---------------------------------------------------------------------
+#example: 1 D stat heat conduction
+route("/onedheat") do 
+  RectanglesController.show_results()
 end
 
 
