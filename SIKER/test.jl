@@ -1,8 +1,5 @@
-module OneDHeatsController
-    using Genie.Renderer.Html
-
-    using LinearAlgebra
-
+using LinearAlgebra
+#using Plots
 function FEM(resolution)
     n = resolution # number of finite elements
     a = 0 #left side
@@ -29,7 +26,12 @@ function FEM(resolution)
     bc  =[1 RB_1]
     #Neumann bc
     F[ndof] = F[ndof] + RB_2
+    x = collect(range(0,10,length=resolution))
+    y = [xi*xi for xi in x]
     u = solveq(K,F,bc)
+    println(typeof(x))
+    println(typeof(u))
+    return u
     # plot(q,u)
     # println(q)
     # println(edof)
@@ -38,7 +40,7 @@ function FEM(resolution)
     # display(K)
     # display(F)
     # display(u)
-    return u
+    
 end
 function netz(n,grad, a,b)
     if grad != 1
@@ -135,26 +137,4 @@ function solveq(K,F,bc)
     return q
 end
 
-
-
-    function squere_it(resolution)
-        x = collect(range(0,10,length=resolution))
-        y = [xi*xi for xi in x]
-        return y
-    end    
-
-    function show_results()
-        html(:onedheat, :ondheatview)
-    end
-
-    function show_calculation(resol)
-        y = squere_it(resol)
-        html(:onedheat, :calculated, T=y)
-    end
-    function show_fem(resol)
-        y = FEM(resol)
-        u = vec(y)
-        html(:onedheat, :calculated, T=u)
-    end
-
-end
+FEM(5)

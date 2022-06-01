@@ -25,6 +25,9 @@ route("/onedheat") do
   OneDHeatsController.show_results()
 end
 route("/codh") do 
+  OneDHeatsController.show_fem(11)
+end
+route("/squere") do 
   OneDHeatsController.show_calculation(11)
 end
 
