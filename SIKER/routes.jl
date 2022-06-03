@@ -29,7 +29,8 @@ route("/codh") do
 end
 route("/codh", method = POST) do 
   a = parse(Int32,postpayload(:res,"11"))
-  OneDHeatsController.show_fem(a)
+  disp_analitc = postpayload(:show_an,"false")
+  OneDHeatsController.show_fem(a,disp_analitc)
 end
 route("/squere") do 
   OneDHeatsController.show_calculation(4)

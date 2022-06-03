@@ -6,17 +6,8 @@
 <script>
 var xValues = [];
 var yValues = [];
-var xAnalitical = []
-var analitical = [];
 
-// Generate values
-for (var x = 0; x <= 50; x += 1) {
-  let mapped = x*2/(50)
-  xAnalitical.push(mapped);
-  let u = Math.pow(mapped,5) - Math.pow(mapped,4) + Math.pow(mapped,3)-3*Math.pow(mapped,2)+2*mapped+1
-  analitical.push(u);
-  
-}
+
 
 for (var x = 0; x <= $(res); x += 1) {
   let mapped = x*2/$(res)
@@ -33,17 +24,29 @@ var numer = {
   mode: "lines",
   name: "FEM"
 };
-
-var analitic = {
-  x: xAnalitical,
-  y: analitical,
-  mode: "lines",
-  name: "Analitical solution"
-};
-
+var data = [numer]
+if ( $(show_an) ){
+  var xAnalitical = []
+  var analitical = [];
+  // Generate values
+  for (var x = 0; x <= 50; x += 1) {
+    let mapped = x*2/(50)
+    xAnalitical.push(mapped);
+    let u = Math.pow(mapped,5) - Math.pow(mapped,4) + Math.pow(mapped,3)-3*Math.pow(mapped,2)+2*mapped+1
+    analitical.push(u);
+    
+  }
+  var analitic = {
+    x: xAnalitical,
+    y: analitical,
+    mode: "lines",
+    name: "Analitical solution"
+  };
+  data.push(analitic)
+}
 // Define Layout
 var layout = {title: "One Dimensional Heat Conduction"};
-var data = [analitic,numer]
+
 // Display using Plotly
 Plotly.newPlot("myPlot", data, layout);
 </script>
@@ -51,8 +54,8 @@ Plotly.newPlot("myPlot", data, layout);
   <form action="/codh" method="post">
   <label for="res">Number of points:</label><br>
   <input type="text" id="res" name="res" value=$(res)><br>
-  <!-- <label for="show_an">Show analitical solution:</label>
-  <input type="checkbox" id="show_an" name = "show_an" checked="true" value="yes"><br> -->
+  <label for="show_an">Show analitical solution:</label>
+  <input type="checkbox" id="show_an" name = "show_an" value="true" checked=$(show_an) ><br>
   <input type="submit" value="Submit" >
 </form>
 </div>

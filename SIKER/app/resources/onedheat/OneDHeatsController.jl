@@ -151,10 +151,10 @@ end
         y = squere_it(resol)
         html(:onedheat, :calculated, T=y)
     end
-    function show_fem(resol)
+    function show_fem(resol,disp_alaitic=true)
         y = FEM(resol)
         u = vec(y)
-        html(:onedheat, :calculated, T=u,res=resol)
+        html(:onedheat, :calculated, T=u,res=resol,show_an=disp_alaitic)
     end
 
 end
