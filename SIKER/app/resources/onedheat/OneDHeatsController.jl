@@ -137,24 +137,24 @@ end
 
 
 
-    function squere_it(resolution)
+    function squere_it(resolution) #OLD VERSION
         x = collect(range(0,10,length=resolution))
         y = [xi*xi for xi in x]
         return y
     end    
 
-    function show_results()
+    function show_results() #OLD VERSION
         html(:onedheat, :ondheatview)
     end
 
-    function show_calculation(resol)
+    function show_calculation(resol) #OLD VERSION
         y = squere_it(resol)
         html(:onedheat, :calculated, T=y)
     end
     function show_fem(resol)
         y = FEM(resol)
         u = vec(y)
-        html(:onedheat, :calculated, T=u)
+        html(:onedheat, :calculated, T=u,res=resol)
     end
 
 end

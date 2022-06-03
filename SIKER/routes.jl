@@ -25,10 +25,14 @@ route("/onedheat") do
   OneDHeatsController.show_results()
 end
 route("/codh") do 
-  OneDHeatsController.show_fem(11)
+  OneDHeatsController.show_fem(4)
+end
+route("/codh", method = POST) do 
+  a = parse(Int32,postpayload(:res,"11"))
+  OneDHeatsController.show_fem(a)
 end
 route("/squere") do 
-  OneDHeatsController.show_calculation(11)
+  OneDHeatsController.show_calculation(4)
 end
 
 
