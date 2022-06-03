@@ -7,7 +7,7 @@
 
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
-<div id="myPlot" style="width:100%;max-width:700px;margin: auto;"></div>
+<div id="myPlot" style="width:80%;max-width:700px;margin: auto; float: right;"></div>
 
 <script>
 var xValues = [];
@@ -56,7 +56,7 @@ var layout = {title: "One Dimensional Heat Conduction"};
 // Display using Plotly
 Plotly.newPlot("myPlot", data, layout);
 </script>
-<div style="width:100%;max-width:400px;margin: auto;background-color: rgba(46, 81, 135, 0.219);text-align: center;">
+<div style="width:20%;max-width:400px;margin: auto;background-color: rgba(46, 81, 135, 0.219);text-align: center; float: left;">
   <form action="/codh" method="post">
   <label for="res">Number of points:</label><br>
   <input type="text" id="res" name="res" value=$(res)><br>
