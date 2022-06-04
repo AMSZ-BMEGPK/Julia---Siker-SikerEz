@@ -210,10 +210,11 @@ module OneDHeatsController
         y = squere_it(resol)
         html(:onedheat, :calculated, T=y)
     end
-    function show_fem(resol,disp_alaitic=true)
-        y = FEM(resol)
+    function show_fem(resol,disp_alaitic=true,grad=1)
+        y = FEM(resol,grad)
         u = vec(y)
-        html(:onedheat, :calculated, T=u,res=resol,show_an=disp_alaitic)
+        tmp = grad==2 ? true : false
+        html(:onedheat, :calculated, T=u,res=resol,show_an=disp_alaitic,quadratic = tmp)
     end
 
 end

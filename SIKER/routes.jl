@@ -30,7 +30,9 @@ end
 route("/codh", method = POST) do 
   a = parse(Int32,postpayload(:res,"11"))
   disp_analitc = postpayload(:show_an,"false")
-  OneDHeatsController.show_fem(a,disp_analitc)
+  grd = postpayload(:element_type,"linear")
+  grad = grd=="quadratic" ? 2 : 1
+  OneDHeatsController.show_fem(a,disp_analitc,grad)
 end
 route("/squere") do 
   OneDHeatsController.show_calculation(4)

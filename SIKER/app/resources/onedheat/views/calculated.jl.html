@@ -62,6 +62,10 @@ Plotly.newPlot("myPlot", data, layout);
   <input type="text" id="res" name="res" value=$(res)><br>
   <label for="show_an">Show analitical solution:</label>
   <input type="checkbox" id="show_an" name = "show_an" value="true" checked=$(show_an) ><br>
+  <select id="element_type" name="element_type">
+    <option value="linear">Linear elements</option>
+    <option value="quadratic" selected= $(quadratic) > Quadratic elements</option>
+  </select><br>
   <input type="submit" value="Submit" >
 </form>
 </div>
