@@ -4,7 +4,7 @@ function FEM(resolution)
     a = 0 #left side
     b=2 # right side
     l=b-a #length
-    grad = 2 #linear
+    grad = 1 #linear
     RB_1 = 1 #Dirichlet on the link site
     RB_2 = 50 # Neumann on the right side
 
@@ -35,7 +35,7 @@ function FEM(resolution)
      display(K)
      display(F)
     display(u)
-    return u
+    return u_num
 end
 function netz(n,grad, a,b)
     if grad == 1
@@ -167,22 +167,22 @@ function solveq(K,F,bc)
     return q
 end
 function grapische_darstellung(u,n,grad)
-    patches = 20
+    patches = 4
     xc = range(-1,1,step=2/patches)
     if grad == 1
         N1 = 0.5 .* (1 .- xc)
         N2 = 0.5 .* (1 .+ xc)
-        u_num = zeros(Float32,patches*n +1)
+        u_num = zeros(patches*n +1)
         for i in range(1,n,step=1)
-            u_num[(i-1)*patches+1 : i*patches+1] =  u[i].*N1 + u[i+1].*N2
+            u_num[(i-1)*patches+1 : i*patches+1] =  u[i].*N1 .+ u[i+1].*N2
         end
     elseif grad == 2
         N1 = 0.5 .* xc .* (xc .- 1)
         N2 = 1 .- (xc .* xc)
         N3 = 0.5 .* xc .* (xc .+1)
-        u_num = zeros(Float32,patches*n +1)
+        u_num = zeros(patches*n +1)
         for i in range(1,n,step=1)
-            u_num[(i-1)*patches+1 : i*patches+1] =  u[(i-1)*2+1].*N1 + u[(i-1)*2+2].*N2 + u[(i-1)*2+3] .* N3
+            u_num[(i-1)*patches+1 : i*patches+1] =  u[(i-1)*2+1].*N1 .+ u[(i-1)*2+2].*N2 .+ u[(i-1)*2+3] .* N3
         end
     else
         throw(ArgumentError("Higher order elements than quadratic are not implemented yet"))

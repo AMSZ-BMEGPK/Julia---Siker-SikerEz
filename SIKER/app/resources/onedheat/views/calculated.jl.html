@@ -15,8 +15,8 @@ var yValues = [];
 
 
 
-for (var x = 0; x <= $(res); x += 1) {
-  let mapped = x*2/$(res)
+for (var x = 0; x <= ($(T)).length-1; x += 1) {
+  let mapped = x*2/(($(T)).length-1)
   xValues.push(mapped);
   yValues.push($(T)[x]);
 //   yValues.push(x);
