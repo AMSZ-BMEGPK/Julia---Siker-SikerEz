@@ -1,11 +1,10 @@
 using LinearAlgebra
-#using Plots
 function FEM(resolution)
     n = resolution # number of finite elements
     a = 0 #left side
     b=2 # right side
     l=b-a #length
-    grad = 1 #linear
+    grad = 2 #linear
     RB_1 = 1 #Dirichlet on the link site
     RB_2 = 50 # Neumann on the right side
 
@@ -18,7 +17,7 @@ function FEM(resolution)
 
     # Elementroutine + Assembly
     for i in range(1,n,step=1)
-        Ke,Fe = element(ed[i,:])
+        Ke,Fe = element(ed[i,:],grad)
         K = assem(K,Ke,edof[i,:])
         F = assem(F,Fe,edof[i,:])
     end
@@ -26,31 +25,35 @@ function FEM(resolution)
     bc  =[1 RB_1]
     #Neumann bc
     F[ndof] = F[ndof] + RB_2
-    x = collect(range(0,10,length=resolution))
-    y = [xi*xi for xi in x]
     u = solveq(K,F,bc)
-    println(typeof(x))
-    println(typeof(u))
-    return u
+    u_num = grapische_darstellung(u,n,grad)
     # plot(q,u)
     # println(q)
     # println(edof)
     # print(ed)
     # println(ndof)
-    # display(K)
-    # display(F)
-    # display(u)
-    
+     display(K)
+     display(F)
+    display(u)
+    return u
 end
 function netz(n,grad, a,b)
-    if grad != 1
-        throw(ArgumentError("Higher order FEM is not implemented yet"))
+    if grad == 1
+        q = collect(range(a,b,length=n+1))
+        edof = zeros(Base.Int32,n,grad+1)
+        for i in range(1,n,step=1)
+            edof[i,:] = [i i+1]
+        end  
+    elseif grad == 2
+        q = collect(range(a,b,length=2*n+1))
+        edof = zeros(Base.Int32,n,3)
+        for i in range(1,n,step=1)
+            edof[i,:] = [(i-1)*2+1  (i-1)*2+2   (i-1)*2+3]
+        end
+    else
+        throw(ArgumentError("Higher order elements than quadratic are not implemented yet"))
     end    
-    q = collect(range(a,b,length=n+1))
-    edof = zeros(Base.Int32,n,grad+1)
-    for i in range(1,n,step=1)
-        edof[i,:] = [i i+1]
-    end
+    
     return q,edof
 end    
 function extract(edof,q)
@@ -59,40 +62,67 @@ function extract(edof,q)
     #print(ed)
     return ed
 end
-function element(qe)
-    #Ke = ones(2,2)
-    #Fe = ones(2,1)
-    nGp = 2 #defining gauss points
-    g1 = 1/sqrt(3)
-    w1 = 1
-    xi = [-g1;g1]
-    w = [w1;w1]
-    
-    #Formfunctions (Lagrange; linear)
-    N=zeros(2,2)
-    N[:,1] = (1 .-xi)./2
-    N[:,2] = (1 .+xi)./2
-    # Derivation with respect xi
-    dNdxi = zeros(2,2)
-    dNdxi[:,1] = -0.5*ones(nGp,1)
-    dNdxi[:,2] = +0.5*ones(nGp,1)
-    #Jacobian-matrix
-    he = qe[2]-qe[1]
-    J = he/2
-    #Intitialization
-    Ke = zeros(2,2)
-    Fe = zeros(2,1)
+function element(qe,grad)
+    if grad == 1
+        nGp = 2 #defining gauss points
+        g1 = 1/sqrt(3)
+        w1 = 1
+        xi = [-g1;g1]
+        w = [w1;w1]
+        
+        #Formfunctions (Lagrange; linear)
+        N=zeros(2,2)
+        N[:,1] = (1 .-xi)./2
+        N[:,2] = (1 .+xi)./2
+        # Derivation with respect xi
+        dNdxi = zeros(2,2)
+        dNdxi[:,1] = -0.5*ones(nGp,1)
+        dNdxi[:,2] = +0.5*ones(nGp,1)
+        #Jacobian-matrix
+        he = qe[2]-qe[1]
+        J = he/2
+        #Intitialization
+        Ke = zeros(2,2)
+        Fe = zeros(2,1)
 
-    #left side
-    f = (-6)*qe+12*qe.^2 + (-20)*qe.^3 .+ 6
-    #doing the actual calculations
+        #left side
+        f = (-6)*qe+12*qe.^2 + (-20)*qe.^3 .+ 6
+        #doing the actual calculations
+    elseif grad == 2
+        #Settin up thing for Gauss integration
+        nGp = 3
+        g1 = 0.774596669241483
+        g2 = 0
+        w1 = 0.555555555555555
+        w2 = 0.888888888888888        
+        xi = [-g1; g2; g1]
+        w  = [ w1; w2; w1]
+        # Lagrangian Form Formfunctions
+        N=zeros(3,3)
+        N[:,1] = (xi .- 1).*(xi)./2
+        N[:,2] = 1 .- ((xi) .* (xi))
+        N[:,3] = (xi).*(1 .+xi)./2
+        # Derivation with respect xi
+        dNdxi = zeros(3,3)
+        dNdxi[:,1] = xi .- 0.5
+        dNdxi[:,2] = -2 .* xi
+        dNdxi[:,3] = xi .+ 0.5
+        #Jacobian-matrix (Affine Transormation)
+        he = qe[3]-qe[1]
+        J = he/2
+        #Intitialization
+        Ke = zeros(3,3)
+        Fe = zeros(3,1)
+        f = (-6)*qe+12*qe.^2 + (-20)*qe.^3 .+ 6
+    else
+        throw(ArgumentError("Higher order elements than quadratic are not implemented yet"))
+    end
     detJ = det(J)
     dNx = dNdxi/J
     for j in range(1,nGp,step=1)
         Ke = Ke + ((dNx[j,:]) * transpose(dNx[j,:]))  .*(detJ*w[j])
         Fe = Fe .+ N[j,:].*(N[j,:]'f) .*(detJ*w[j])
     end
-
     return Ke,Fe
 end
 function assem(O,Oe,dof)
@@ -135,6 +165,29 @@ function solveq(K,F,bc)
     end
     
     return q
+end
+function grapische_darstellung(u,n,grad)
+    patches = 20
+    xc = range(-1,1,step=2/patches)
+    if grad == 1
+        N1 = 0.5 .* (1 .- xc)
+        N2 = 0.5 .* (1 .+ xc)
+        u_num = zeros(Float32,patches*n +1)
+        for i in range(1,n,step=1)
+            u_num[(i-1)*patches+1 : i*patches+1] =  u[i].*N1 + u[i+1].*N2
+        end
+    elseif grad == 2
+        N1 = 0.5 .* xc .* (xc .- 1)
+        N2 = 1 .- (xc .* xc)
+        N3 = 0.5 .* xc .* (xc .+1)
+        u_num = zeros(Float32,patches*n +1)
+        for i in range(1,n,step=1)
+            u_num[(i-1)*patches+1 : i*patches+1] =  u[(i-1)*2+1].*N1 + u[(i-1)*2+2].*N2 + u[(i-1)*2+3] .* N3
+        end
+    else
+        throw(ArgumentError("Higher order elements than quadratic are not implemented yet"))
+    end
+    return u_num
 end
 
 FEM(5)
